@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Drum Kit</title>
+        <!-- <link rel="stylesheet" type="text/css" src="/Users/som/Desktop/Drum Kit/style.css"> -->
+        <style>
+            .key {
+                border-radius: 5px;
+                margin: 1rem;
+                font-size: 1.5rem;
+                padding: 1rem .5rem;
+                transition: all 0.07s;
+                width: 80px;
+                text-align: center;
+                color: white;
+                text-shadow: 0 0 5px black;
+                display: inline-block;
+                margin-top: 250px;
+                margin-left: 20px;
+            }
+
+            .playing {
+                transform: scale(1.1);
+                border-color: gold;
+                box-shadow: 0 0 10px gold;
+            }
+
+            .sound {
+                font-size: 1.2rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: #ffc600;
+            }
+
+            kbd {
+                display: block;
+                font-size: 40px;
+            }
+            body {
+                background-image: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80');
+            }
+            
+        </style>
+        
+    </head>
+
+    <body>
+
+        <!-- div is a block element -->
+        <div class="keys">
+
+            <!-- keycode.info -->
+            <!-- if we want our given names then we have to put it after "data-" -->
+            <div data-key="69" class="key"> 
+                <!-- Keyboard Input Element -->
+                <kbd>E</kbd>
+                <!-- span is an inline element -->
+                <span class="sound">Crash</span>
+            </div>
+
+            <div data-key="82" class="key"> 
+                <kbd>R</kbd>
+                <span class="sound">Ride</span>
+            </div>
+
+            <div data-key="70" class="key"> 
+                <kbd>F</kbd>
+                <span class="sound">Floor Tom</span>
+            </div>
+
+            <div data-key="71" class="key"> 
+                <kbd>G</kbd>
+                <span class="sound">Mid Tom</span>
+            </div>
+
+            <div data-key="72" class="key"> 
+                <kbd>H</kbd>
+                <span class="sound">High Tom</span>
+            </div>
+
+            <div data-key="86" class="key"> 
+                <kbd>V</kbd>
+                <span class="sound">Kick</span>
+            </div>
+
+            <div data-key="74" class="key"> 
+                <kbd>J</kbd>
+                <span class="sound">Snare</span>
+            </div>
+
+            <div data-key="73" class="key"> 
+                <kbd>I</kbd>
+                <span class="sound">Hi-Hat Open</span>
+            </div>
+
+            <div data-key="75" class="key"> 
+                <kbd>K</kbd>
+                <span class="sound">Hi-Hat Close</span>
+            </div>
+
+        </div>
+
+        <audio data-key="69" src="https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/crash.wav"></audio>
+        <audio data-key="82" src="https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/ride.wav"></audio>
+        <audio data-key="70" src="https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/tom-low.wav"></audio>
+        <audio data-key="71" src="https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/tom-mid.wav"></audio>
+        <audio data-key="72" src="https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/tom-high.wav"></audio>
+        <audio data-key="86" src="https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/kick.wav"></audio>
+        <audio data-key="74" src="https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/snare.wav"></audio>
+        <audio data-key="73" src="https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/hihat-open.wav"></audio>
+        <audio data-key="75" src="https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/hihat-close.wav"></audio>
+
+
+        <script>
+
+            function playSound(e) {
+                //console.log(e.keyCode);
+                const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+                const key = document.querySelector(`.key[data-key="${e.keyCode}"]`); //we also want to highlight which key is being pressed
+                //console.log(audio);
+                if(!audio) {
+                    return;      // stop the function from running all together
+                };
+                audio.currentTime = 0;  //sound is played with the same frequency of the key being pressed, i.e rewind to the start
+                audio.play();
+                //console.log(key);
+                key.classList.add('playing');       //changes to playing state(inside <style>)
+            }
+
+            function removeTransition(e) {      //it considers all the transition-end events took place from .key to .playing
+                if(e.propertyName !== 'transform') {
+                    return;
+                };
+                this.classList.remove('playing');       //this = key, this is always is whatever got called against it 
+            };                                          //now the yellow border of the keys will be removed nice and quick after being pressed 
+
+            
+
+            const keys = document.querySelectorAll('.key');     //array of key in keys
+            //console.log(keys);
+            keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+            window.addEventListener('keydown', playSound);       //keydown is a keyboard event which will show which key is pressed
+
+
+        </script>
+
+    </body>
+
+</html>
